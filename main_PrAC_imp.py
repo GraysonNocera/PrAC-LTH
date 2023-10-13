@@ -77,6 +77,7 @@ def main():
         setup_seed(args.seed)
 
     # prepare dataset 
+    # this gets the model and dataset based on the user input in CLI
     model, train_dataset, val_loader, test_loader, train_number = setup_model_dataset(args, if_train_set=True)
     model.cuda()
 
@@ -95,13 +96,18 @@ def main():
     else:
         assert False
 
+    # Use SGD for gradient descent
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
                                 weight_decay=args.weight_decay)
+
+    # Decay the learning rate after reaching certain training iterations
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=decreasing_lr, gamma=0.1)
     
     if args.resume:
         print('resume from checkpoint')
+
+        # Reload some data about the model from a file
         checkpoint = torch.load(args.checkpoint, map_location = torch.device('cuda:'+str(args.gpu)))
         best_sa = checkpoint['best_sa']
         start_epoch = checkpoint['epoch']
@@ -253,6 +259,7 @@ def main():
         check_sparsity(model)                 
 
         # construct PrAC sets
+        # HERE IT IS
         example_wise_prediction = np.concatenate(example_wise_prediction, axis=1)
         print('* record size = {}'.format(example_wise_prediction.shape))
         sequence = sorted_examples(example_wise_prediction, args.data_prune, args.data_rate, state+1, args.threshold, train_number)
