@@ -80,6 +80,17 @@ def main():
     if args.seed:
         setup_seed(args.seed)
 
+    logging.basicConfig(filename=os.path.join(args.save_dir, "test.log"), encoding='utf-8', level=logging.DEBUG)
+    logging.info("Beginning of logs")
+    # We will need to get the total number of samples in the original dataset
+    # Then calculate how many samples are slimmed down in the first Data slimming (hard to memorize)
+    # Then calculate how many samples are slimmed down in the second Data slimming (easy to forget)
+    # Keep a list of how many are slimmed each training iteration: sum this up and divide by total to get fraction that are hard to memorize and easy to forget
+
+    # Ideas for graphs:
+    # How the fractions of both types of samples compared to the full dataset changes over training iterations
+    # Have two graphs, one for mnist and one for cifar-100, with each having two lines: for hard to memorize and easy to forget
+
     # prepare dataset 
     # this gets the model and dataset based on the user input in CLI
     model, train_dataset, val_loader, test_loader, train_number = setup_model_dataset(args, if_train_set=True)
