@@ -1,7 +1,7 @@
 import os 
 import numpy as np 
 from torchvision import transforms
-from torchvision.datasets import CIFAR10, CIFAR100, FashionMNIST, ImageFolder
+from torchvision.datasets import CIFAR10, CIFAR100, ImageFolder, MNIST
 from torch.utils.data import DataLoader, Subset
 
 __all__ = ['cifar10_dataloaders', 'cifar100_dataloaders', 'tiny_imagenet_dataloaders', 
@@ -58,6 +58,34 @@ def cifar100_dataloaders(batch_size=128, data_dir='datasets/cifar100', dataset=F
     if dataset:
         print('return train dataset')
         train_dataset = CIFAR100(data_dir, train=True, transform=train_transform, download=True)
+        return train_dataset, val_loader, test_loader
+    else:
+        return train_loader, val_loader, test_loader
+
+def mnist_dataloaders(batch_size=128, data_dir='datasets/mnist', dataset=False):
+    # TODO: research what values to use here
+
+    train_transform = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+    ])
+
+    test_transform = transforms.Compose([
+        transforms.ToTensor(),
+    ])
+
+    train_set = Subset(MNIST(data_dir, train=True, transform=train_transform, download=True), list(range(45000)))
+    val_set = Subset(MNIST(data_dir, train=True, transform=test_transform, download=True), list(range(45000, 50000)))
+    test_set = MNIST(data_dir, train=False, transform=test_transform, download=True)
+
+    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=False, pin_memory=True)
+    val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
+    test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
+
+    if dataset:
+        print('return train dataset')
+        train_dataset = MNIST(data_dir, train=True, transform=train_transform, download=True)
         return train_dataset, val_loader, test_loader
     else:
         return train_loader, val_loader, test_loader

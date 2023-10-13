@@ -39,8 +39,17 @@ def setup_model_dataset(args, if_train_set=False):
         normalization = NormalizeByChannelMeanStd(
             mean=[0.4802, 0.4481, 0.3975], std=[0.2302, 0.2265, 0.2262])
         train_set_loader, val_loader, test_loader = tiny_imagenet_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set, split_file = args.split_file)
+
+    elif args.dataset == 'mnist':
+        # TODO: figure out what numbers to put here
+        classes = 200
+        train_number = 90000
+        normalization = NormalizeByChannelMeanStd(
+            mean=[0.4802, 0.4481, 0.3975], std=[0.2302, 0.2265, 0.2262])
+        train_set_loader, val_loader, test_loader = tiny_imagenet_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set, split_file = args.split_file)
+
     else:
-        raise ValueError('unknow dataset')
+        raise ValueError('unknown dataset')
 
     if args.arch == 'res18':
         print('build model resnet18')
