@@ -1,0 +1,456 @@
+Namespace(arch='res20s', batch_size=128, checkpoint=None, data='data/cifar10', data_prune='zero_out', data_rate=0.2, dataset='cifar10', decreasing_lr='91,136', eb_eps=0.08, epochs=182, gpu=0, lr=0.1, momentum=0.9, print_freq=50, prune_type='rewind_lt', pruning_times=16, queue_length=5, rate=0.2, resume=False, rewind_epoch=2, save_dir='PrAC_lt_cifar10_res20s', seed=None, split_file='npy_files/cifar10-train-val.npy', threshold=0, warmup=0, weight_decay=0.0001)
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+return train dataset
+Files already downloaded and verified
+build model: resnet20
+######################################## Start Standard Training Iterative Pruning ########################################
+******************************************
+pruning state 0
+* remain parameters = 267696
+******************************************
+* remain weight =  100.0 %
+0.1
+* training images number = 45000
+Epoch: [0][0/352]	Loss 3.5642 (3.5642)	Accuracy 10.938 (10.938)	Time 0.13
+Epoch: [0][50/352]	Loss 1.8949 (2.1762)	Accuracy 25.781 (23.974)	Time 2.73
+Epoch: [0][100/352]	Loss 1.7106 (1.9777)	Accuracy 34.375 (28.612)	Time 2.52
+Epoch: [0][150/352]	Loss 1.7724 (1.8650)	Accuracy 34.375 (31.747)	Time 2.52
+Epoch: [0][200/352]	Loss 1.4855 (1.7866)	Accuracy 46.094 (34.371)	Time 2.51
+Epoch: [0][250/352]	Loss 1.4800 (1.7274)	Accuracy 42.969 (36.392)	Time 2.52
+Epoch: [0][300/352]	Loss 1.5145 (1.6808)	Accuracy 39.844 (38.032)	Time 2.52
+Epoch: [0][350/352]	Loss 1.4974 (1.6377)	Accuracy 43.750 (39.586)	Time 2.52
+train_accuracy 39.589
+Test: [0/40]	Loss 1.4255 (1.4255)	Accuracy 49.219 (49.219)
+valid_accuracy 46.900
+Test: [0/79]	Loss 1.4893 (1.4893)	Accuracy 50.000 (50.000)
+Test: [50/79]	Loss 1.4116 (1.5245)	Accuracy 46.875 (46.875)
+valid_accuracy 47.020
+Apply Unstructured L1 Pruning
+Remove Pruning
+0.1
+Epoch: [1][0/352]	Loss 1.5168 (1.5168)	Accuracy 49.219 (49.219)	Time 0.05
+Epoch: [1][50/352]	Loss 1.2882 (1.3220)	Accuracy 53.125 (51.562)	Time 2.30
+Epoch: [1][100/352]	Loss 1.2323 (1.2738)	Accuracy 57.031 (53.589)	Time 2.29
+Epoch: [1][150/352]	Loss 1.0097 (1.2398)	Accuracy 64.062 (54.672)	Time 2.28
+Epoch: [1][200/352]	Loss 1.2925 (1.2202)	Accuracy 52.344 (55.527)	Time 2.28
+Epoch: [1][250/352]	Loss 1.1268 (1.1995)	Accuracy 57.812 (56.353)	Time 2.27
+Epoch: [1][300/352]	Loss 1.1956 (1.1776)	Accuracy 57.031 (57.262)	Time 2.27
+Epoch: [1][350/352]	Loss 1.1515 (1.1585)	Accuracy 64.062 (58.051)	Time 2.28
+train_accuracy 58.051
+Test: [0/40]	Loss 1.2216 (1.2216)	Accuracy 60.156 (60.156)
+valid_accuracy 61.660
+Test: [0/79]	Loss 1.1068 (1.1068)	Accuracy 63.281 (63.281)
+Test: [50/79]	Loss 1.3349 (1.1399)	Accuracy 57.031 (60.784)
+valid_accuracy 60.600
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.15005826950073242
+0.1
+Epoch: [2][0/352]	Loss 1.1390 (1.1390)	Accuracy 54.688 (54.688)	Time 0.05
+Epoch: [2][50/352]	Loss 0.8935 (1.0145)	Accuracy 69.531 (63.496)	Time 2.59
+Epoch: [2][100/352]	Loss 0.9409 (0.9969)	Accuracy 64.844 (64.279)	Time 2.55
+Epoch: [2][150/352]	Loss 0.9231 (0.9936)	Accuracy 67.969 (64.456)	Time 2.53
+Epoch: [2][200/352]	Loss 0.7702 (0.9667)	Accuracy 70.312 (65.497)	Time 2.53
+Epoch: [2][250/352]	Loss 1.1541 (0.9582)	Accuracy 60.938 (65.830)	Time 2.53
+Epoch: [2][300/352]	Loss 0.7810 (0.9461)	Accuracy 70.312 (66.318)	Time 2.57
+Epoch: [2][350/352]	Loss 0.8986 (0.9312)	Accuracy 65.625 (66.974)	Time 2.53
+train_accuracy 66.987
+Test: [0/40]	Loss 0.7803 (0.7803)	Accuracy 72.656 (72.656)
+valid_accuracy 69.040
+Test: [0/79]	Loss 0.8661 (0.8661)	Accuracy 66.406 (66.406)
+Test: [50/79]	Loss 1.0143 (0.9159)	Accuracy 68.750 (68.306)
+valid_accuracy 68.360
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.14055494964122772
+0.1
+Epoch: [3][0/352]	Loss 0.6857 (0.6857)	Accuracy 77.344 (77.344)	Time 0.06
+Epoch: [3][50/352]	Loss 0.7344 (0.8183)	Accuracy 76.562 (71.829)	Time 2.45
+Epoch: [3][100/352]	Loss 0.6807 (0.8099)	Accuracy 78.906 (71.798)	Time 2.32
+Epoch: [3][150/352]	Loss 0.7665 (0.8011)	Accuracy 74.219 (72.056)	Time 2.29
+Epoch: [3][200/352]	Loss 0.7277 (0.7970)	Accuracy 68.750 (72.085)	Time 2.42
+Epoch: [3][250/352]	Loss 0.8719 (0.7870)	Accuracy 71.875 (72.460)	Time 2.38
+Epoch: [3][300/352]	Loss 0.7600 (0.7809)	Accuracy 65.625 (72.661)	Time 2.36
+Epoch: [3][350/352]	Loss 0.7070 (0.7741)	Accuracy 74.219 (72.834)	Time 2.45
+train_accuracy 72.840
+Test: [0/40]	Loss 0.6353 (0.6353)	Accuracy 78.906 (78.906)
+valid_accuracy 73.240
+Test: [0/79]	Loss 0.8299 (0.8299)	Accuracy 73.438 (73.438)
+Test: [50/79]	Loss 0.9366 (0.8341)	Accuracy 75.000 (72.442)
+valid_accuracy 72.160
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.1301102638244629
+0.1
+Epoch: [4][0/352]	Loss 0.5971 (0.5971)	Accuracy 78.125 (78.125)	Time 0.05
+Epoch: [4][50/352]	Loss 0.6533 (0.6850)	Accuracy 73.438 (75.797)	Time 2.30
+Epoch: [4][100/352]	Loss 0.7713 (0.6894)	Accuracy 74.219 (75.975)	Time 2.28
+Epoch: [4][150/352]	Loss 0.6871 (0.6884)	Accuracy 73.438 (75.993)	Time 2.41
+Epoch: [4][200/352]	Loss 0.6738 (0.6925)	Accuracy 75.000 (75.863)	Time 2.34
+Epoch: [4][250/352]	Loss 0.8342 (0.6900)	Accuracy 73.438 (75.971)	Time 2.36
+Epoch: [4][300/352]	Loss 0.7057 (0.6851)	Accuracy 78.125 (76.150)	Time 2.39
+Epoch: [4][350/352]	Loss 0.5798 (0.6832)	Accuracy 78.125 (76.235)	Time 2.37
+train_accuracy 76.253
+Test: [0/40]	Loss 0.7157 (0.7157)	Accuracy 77.344 (77.344)
+valid_accuracy 69.480
+Test: [0/79]	Loss 0.8463 (0.8463)	Accuracy 69.531 (69.531)
+Test: [50/79]	Loss 1.1182 (0.9602)	Accuracy 66.406 (69.026)
+valid_accuracy 68.660
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.12079373002052307
+0.1
+Epoch: [5][0/352]	Loss 0.5958 (0.5958)	Accuracy 78.125 (78.125)	Time 0.10
+Epoch: [5][50/352]	Loss 0.5134 (0.6426)	Accuracy 79.688 (78.110)	Time 2.31
+Epoch: [5][100/352]	Loss 0.6518 (0.6310)	Accuracy 75.781 (78.195)	Time 2.28
+Epoch: [5][150/352]	Loss 0.7009 (0.6330)	Accuracy 75.000 (77.965)	Time 2.28
+Epoch: [5][200/352]	Loss 0.5257 (0.6314)	Accuracy 83.594 (77.997)	Time 2.39
+Epoch: [5][250/352]	Loss 0.6452 (0.6282)	Accuracy 76.562 (78.141)	Time 2.37
+Epoch: [5][300/352]	Loss 0.4852 (0.6289)	Accuracy 79.688 (78.107)	Time 2.50
+Epoch: [5][350/352]	Loss 0.5078 (0.6273)	Accuracy 86.719 (78.185)	Time 2.53
+train_accuracy 78.180
+Test: [0/40]	Loss 0.7777 (0.7777)	Accuracy 69.531 (69.531)
+valid_accuracy 78.420
+Test: [0/79]	Loss 0.6401 (0.6401)	Accuracy 78.906 (78.906)
+Test: [50/79]	Loss 0.7744 (0.7093)	Accuracy 75.000 (76.225)
+valid_accuracy 76.460
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.11723746359348297
+0.1
+Epoch: [6][0/352]	Loss 0.6575 (0.6575)	Accuracy 76.562 (76.562)	Time 0.05
+Epoch: [6][50/352]	Loss 0.4756 (0.5869)	Accuracy 82.031 (79.749)	Time 2.69
+Epoch: [6][100/352]	Loss 0.5114 (0.5805)	Accuracy 85.938 (79.703)	Time 2.34
+Epoch: [6][150/352]	Loss 0.5535 (0.5836)	Accuracy 82.812 (79.688)	Time 2.33
+Epoch: [6][200/352]	Loss 0.5109 (0.5852)	Accuracy 78.906 (79.528)	Time 2.29
+Epoch: [6][250/352]	Loss 0.6225 (0.5797)	Accuracy 78.906 (79.666)	Time 2.31
+Epoch: [6][300/352]	Loss 0.5055 (0.5791)	Accuracy 85.156 (79.729)	Time 2.31
+Epoch: [6][350/352]	Loss 0.5475 (0.5831)	Accuracy 82.812 (79.610)	Time 2.29
+train_accuracy 79.591
+Test: [0/40]	Loss 0.6835 (0.6835)	Accuracy 76.562 (76.562)
+valid_accuracy 78.600
+Test: [0/79]	Loss 0.6864 (0.6864)	Accuracy 78.906 (78.906)
+Test: [50/79]	Loss 0.9236 (0.6986)	Accuracy 76.562 (76.716)
+valid_accuracy 76.920
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.11535472422838211
+0.1
+Epoch: [7][0/352]	Loss 0.4570 (0.4570)	Accuracy 81.250 (81.250)	Time 0.06
+Epoch: [7][50/352]	Loss 0.3618 (0.5382)	Accuracy 85.938 (80.959)	Time 2.66
+Epoch: [7][100/352]	Loss 0.5234 (0.5361)	Accuracy 81.250 (81.142)	Time 2.58
+Epoch: [7][150/352]	Loss 0.6191 (0.5371)	Accuracy 79.688 (81.286)	Time 2.57
+Epoch: [7][200/352]	Loss 0.6225 (0.5368)	Accuracy 78.125 (81.433)	Time 2.61
+Epoch: [7][250/352]	Loss 0.5534 (0.5381)	Accuracy 82.812 (81.384)	Time 2.55
+Epoch: [7][300/352]	Loss 0.5955 (0.5410)	Accuracy 81.250 (81.323)	Time 2.55
+Epoch: [7][350/352]	Loss 0.6545 (0.5401)	Accuracy 82.031 (81.261)	Time 2.56
+train_accuracy 81.256
+Test: [0/40]	Loss 0.5212 (0.5212)	Accuracy 82.031 (82.031)
+valid_accuracy 81.060
+Test: [0/79]	Loss 0.4461 (0.4461)	Accuracy 85.156 (85.156)
+Test: [50/79]	Loss 0.7068 (0.6033)	Accuracy 79.688 (80.193)
+valid_accuracy 80.120
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.11061053723096848
+0.1
+Epoch: [8][0/352]	Loss 0.5003 (0.5003)	Accuracy 84.375 (84.375)	Time 0.05
+Epoch: [8][50/352]	Loss 0.5001 (0.5240)	Accuracy 84.375 (82.690)	Time 2.29
+Epoch: [8][100/352]	Loss 0.5721 (0.5201)	Accuracy 79.688 (82.232)	Time 2.30
+Epoch: [8][150/352]	Loss 0.4342 (0.5154)	Accuracy 85.156 (82.238)	Time 2.31
+Epoch: [8][200/352]	Loss 0.5197 (0.5129)	Accuracy 80.469 (82.338)	Time 2.28
+Epoch: [8][250/352]	Loss 0.5817 (0.5148)	Accuracy 80.469 (82.237)	Time 2.27
+Epoch: [8][300/352]	Loss 0.4745 (0.5153)	Accuracy 85.156 (82.213)	Time 2.27
+Epoch: [8][350/352]	Loss 0.5845 (0.5129)	Accuracy 78.125 (82.298)	Time 2.27
+train_accuracy 82.282
+Test: [0/40]	Loss 0.5431 (0.5431)	Accuracy 81.250 (81.250)
+valid_accuracy 81.760
+Test: [0/79]	Loss 0.5432 (0.5432)	Accuracy 81.250 (81.250)
+Test: [50/79]	Loss 0.5778 (0.5925)	Accuracy 82.812 (80.668)
+valid_accuracy 80.450
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.11167144775390625
+0.1
+Epoch: [9][0/352]	Loss 0.4639 (0.4639)	Accuracy 84.375 (84.375)	Time 0.09
+Epoch: [9][50/352]	Loss 0.5537 (0.5060)	Accuracy 77.344 (82.629)	Time 2.63
+Epoch: [9][100/352]	Loss 0.4706 (0.4937)	Accuracy 82.812 (82.843)	Time 2.59
+Epoch: [9][150/352]	Loss 0.4764 (0.4955)	Accuracy 85.156 (82.818)	Time 2.58
+Epoch: [9][200/352]	Loss 0.5710 (0.4998)	Accuracy 80.469 (82.778)	Time 2.55
+Epoch: [9][250/352]	Loss 0.4010 (0.4990)	Accuracy 86.719 (82.897)	Time 2.52
+Epoch: [9][300/352]	Loss 0.6246 (0.4988)	Accuracy 78.125 (82.880)	Time 2.51
+Epoch: [9][350/352]	Loss 0.4659 (0.4978)	Accuracy 84.375 (82.841)	Time 2.54
+train_accuracy 82.862
+Test: [0/40]	Loss 0.7474 (0.7474)	Accuracy 78.125 (78.125)
+valid_accuracy 79.260
+Test: [0/79]	Loss 0.6477 (0.6477)	Accuracy 78.125 (78.125)
+Test: [50/79]	Loss 0.8358 (0.6927)	Accuracy 75.000 (77.834)
+valid_accuracy 78.190
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.11056571453809738
+0.1
+Epoch: [10][0/352]	Loss 0.4911 (0.4911)	Accuracy 88.281 (88.281)	Time 0.10
+Epoch: [10][50/352]	Loss 0.3691 (0.4605)	Accuracy 86.719 (83.977)	Time 2.55
+Epoch: [10][100/352]	Loss 0.3820 (0.4709)	Accuracy 83.594 (83.748)	Time 2.58
+Epoch: [10][150/352]	Loss 0.4558 (0.4672)	Accuracy 87.500 (84.028)	Time 2.55
+Epoch: [10][200/352]	Loss 0.5177 (0.4614)	Accuracy 78.125 (84.173)	Time 2.59
+Epoch: [10][250/352]	Loss 0.6850 (0.4719)	Accuracy 76.562 (83.746)	Time 2.39
+Epoch: [10][300/352]	Loss 0.5415 (0.4739)	Accuracy 83.594 (83.560)	Time 2.27
+Epoch: [10][350/352]	Loss 0.4503 (0.4755)	Accuracy 82.812 (83.505)	Time 2.44
+train_accuracy 83.504
+Test: [0/40]	Loss 0.4992 (0.4992)	Accuracy 80.469 (80.469)
+valid_accuracy 80.860
+Test: [0/79]	Loss 0.5343 (0.5343)	Accuracy 80.469 (80.469)
+Test: [50/79]	Loss 0.6402 (0.6072)	Accuracy 82.031 (79.565)
+valid_accuracy 79.590
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.11019962280988693
+0.1
+Epoch: [11][0/352]	Loss 0.3348 (0.3348)	Accuracy 86.719 (86.719)	Time 0.05
+Epoch: [11][50/352]	Loss 0.6051 (0.4366)	Accuracy 78.906 (84.544)	Time 2.39
+Epoch: [11][100/352]	Loss 0.4833 (0.4331)	Accuracy 84.375 (84.870)	Time 2.29
+Epoch: [11][150/352]	Loss 0.5249 (0.4416)	Accuracy 82.031 (84.665)	Time 2.29
+Epoch: [11][200/352]	Loss 0.5051 (0.4479)	Accuracy 81.250 (84.503)	Time 2.30
+Epoch: [11][250/352]	Loss 0.5236 (0.4435)	Accuracy 82.031 (84.636)	Time 2.28
+Epoch: [11][300/352]	Loss 0.4061 (0.4464)	Accuracy 86.719 (84.505)	Time 2.29
+Epoch: [11][350/352]	Loss 0.4915 (0.4472)	Accuracy 82.812 (84.480)	Time 2.27
+train_accuracy 84.480
+Test: [0/40]	Loss 0.4283 (0.4283)	Accuracy 86.719 (86.719)
+valid_accuracy 81.880
+Test: [0/79]	Loss 0.5402 (0.5402)	Accuracy 80.469 (80.469)
+Test: [50/79]	Loss 0.7031 (0.5786)	Accuracy 78.125 (80.806)
+valid_accuracy 80.810
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10818988084793091
+0.1
+Epoch: [12][0/352]	Loss 0.4928 (0.4928)	Accuracy 82.812 (82.812)	Time 0.05
+Epoch: [12][50/352]	Loss 0.4556 (0.4456)	Accuracy 86.719 (84.544)	Time 2.29
+Epoch: [12][100/352]	Loss 0.3768 (0.4576)	Accuracy 85.156 (83.973)	Time 2.30
+Epoch: [12][150/352]	Loss 0.4994 (0.4519)	Accuracy 78.125 (84.277)	Time 2.29
+Epoch: [12][200/352]	Loss 0.3069 (0.4461)	Accuracy 91.406 (84.600)	Time 2.28
+Epoch: [12][250/352]	Loss 0.4429 (0.4441)	Accuracy 88.281 (84.636)	Time 2.34
+Epoch: [12][300/352]	Loss 0.4786 (0.4414)	Accuracy 83.594 (84.658)	Time 2.27
+Epoch: [12][350/352]	Loss 0.5442 (0.4443)	Accuracy 81.250 (84.589)	Time 2.26
+train_accuracy 84.593
+Test: [0/40]	Loss 0.4793 (0.4793)	Accuracy 86.719 (86.719)
+valid_accuracy 78.800
+Test: [0/79]	Loss 0.6401 (0.6401)	Accuracy 80.469 (80.469)
+Test: [50/79]	Loss 0.7265 (0.7118)	Accuracy 77.344 (78.033)
+valid_accuracy 77.990
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10920596122741699
+0.1
+Epoch: [13][0/352]	Loss 0.4488 (0.4488)	Accuracy 80.469 (80.469)	Time 0.05
+Epoch: [13][50/352]	Loss 0.4288 (0.4422)	Accuracy 86.719 (84.835)	Time 2.26
+Epoch: [13][100/352]	Loss 0.4730 (0.4292)	Accuracy 83.594 (85.210)	Time 2.27
+Epoch: [13][150/352]	Loss 0.4885 (0.4340)	Accuracy 79.688 (85.068)	Time 2.28
+Epoch: [13][200/352]	Loss 0.3945 (0.4333)	Accuracy 86.719 (85.001)	Time 2.27
+Epoch: [13][250/352]	Loss 0.4305 (0.4276)	Accuracy 86.719 (85.234)	Time 2.38
+Epoch: [13][300/352]	Loss 0.4215 (0.4294)	Accuracy 83.594 (85.138)	Time 2.35
+Epoch: [13][350/352]	Loss 0.4105 (0.4287)	Accuracy 85.156 (85.239)	Time 2.30
+train_accuracy 85.238
+Test: [0/40]	Loss 0.6878 (0.6878)	Accuracy 75.781 (75.781)
+valid_accuracy 79.800
+Test: [0/79]	Loss 0.7289 (0.7289)	Accuracy 75.000 (75.000)
+Test: [50/79]	Loss 0.7744 (0.6662)	Accuracy 75.000 (79.090)
+valid_accuracy 79.410
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10824965685606003
+0.1
+Epoch: [14][0/352]	Loss 0.3636 (0.3636)	Accuracy 86.719 (86.719)	Time 0.05
+Epoch: [14][50/352]	Loss 0.4480 (0.4024)	Accuracy 84.375 (85.983)	Time 2.53
+Epoch: [14][100/352]	Loss 0.3690 (0.4072)	Accuracy 85.938 (85.883)	Time 2.52
+Epoch: [14][150/352]	Loss 0.3362 (0.4093)	Accuracy 90.625 (85.906)	Time 2.50
+Epoch: [14][200/352]	Loss 0.4016 (0.4100)	Accuracy 85.156 (85.883)	Time 2.54
+Epoch: [14][250/352]	Loss 0.3480 (0.4080)	Accuracy 85.156 (85.853)	Time 2.55
+Epoch: [14][300/352]	Loss 0.3139 (0.4106)	Accuracy 89.844 (85.805)	Time 2.56
+Epoch: [14][350/352]	Loss 0.3342 (0.4097)	Accuracy 89.062 (85.840)	Time 2.56
+train_accuracy 85.838
+Test: [0/40]	Loss 0.4670 (0.4670)	Accuracy 82.031 (82.031)
+valid_accuracy 79.080
+Test: [0/79]	Loss 0.6346 (0.6346)	Accuracy 75.000 (75.000)
+Test: [50/79]	Loss 0.7075 (0.6823)	Accuracy 76.562 (78.094)
+valid_accuracy 78.140
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10751748085021973
+0.1
+Epoch: [15][0/352]	Loss 0.4302 (0.4302)	Accuracy 85.156 (85.156)	Time 0.11
+Epoch: [15][50/352]	Loss 0.4967 (0.3941)	Accuracy 83.594 (86.137)	Time 2.56
+Epoch: [15][100/352]	Loss 0.4436 (0.4033)	Accuracy 83.594 (86.023)	Time 2.54
+Epoch: [15][150/352]	Loss 0.4267 (0.4061)	Accuracy 87.500 (85.979)	Time 2.68
+Epoch: [15][200/352]	Loss 0.3773 (0.4070)	Accuracy 87.500 (85.868)	Time 2.54
+Epoch: [15][250/352]	Loss 0.2680 (0.4051)	Accuracy 89.844 (85.984)	Time 2.54
+Epoch: [15][300/352]	Loss 0.3390 (0.4053)	Accuracy 89.844 (85.969)	Time 2.54
+Epoch: [15][350/352]	Loss 0.3403 (0.4047)	Accuracy 85.156 (86.031)	Time 2.54
+train_accuracy 86.024
+Test: [0/40]	Loss 0.5079 (0.5079)	Accuracy 82.812 (82.812)
+valid_accuracy 82.140
+Test: [0/79]	Loss 0.5857 (0.5857)	Accuracy 82.031 (82.031)
+Test: [50/79]	Loss 0.6153 (0.6120)	Accuracy 78.906 (80.070)
+valid_accuracy 79.970
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10751748085021973
+0.1
+Epoch: [16][0/352]	Loss 0.3728 (0.3728)	Accuracy 85.938 (85.938)	Time 0.05
+Epoch: [16][50/352]	Loss 0.4080 (0.3768)	Accuracy 88.281 (86.657)	Time 2.34
+Epoch: [16][100/352]	Loss 0.3416 (0.3751)	Accuracy 89.844 (86.850)	Time 2.35
+Epoch: [16][150/352]	Loss 0.3110 (0.3802)	Accuracy 89.844 (86.698)	Time 2.35
+Epoch: [16][200/352]	Loss 0.4044 (0.3836)	Accuracy 85.938 (86.660)	Time 2.35
+Epoch: [16][250/352]	Loss 0.3738 (0.3900)	Accuracy 85.938 (86.532)	Time 2.34
+Epoch: [16][300/352]	Loss 0.4383 (0.3909)	Accuracy 85.156 (86.516)	Time 2.35
+Epoch: [16][350/352]	Loss 0.4430 (0.3897)	Accuracy 85.156 (86.579)	Time 2.37
+train_accuracy 86.578
+Test: [0/40]	Loss 0.3948 (0.3948)	Accuracy 86.719 (86.719)
+valid_accuracy 83.620
+Test: [0/79]	Loss 0.5429 (0.5429)	Accuracy 86.719 (86.719)
+Test: [50/79]	Loss 0.5694 (0.5303)	Accuracy 83.594 (82.445)
+valid_accuracy 82.700
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.1060904860496521
+0.1
+Epoch: [17][0/352]	Loss 0.3757 (0.3757)	Accuracy 84.375 (84.375)	Time 0.05
+Epoch: [17][50/352]	Loss 0.4327 (0.3563)	Accuracy 82.031 (87.638)	Time 2.33
+Epoch: [17][100/352]	Loss 0.3105 (0.3716)	Accuracy 91.406 (86.966)	Time 2.35
+Epoch: [17][150/352]	Loss 0.4055 (0.3729)	Accuracy 87.500 (87.153)	Time 2.35
+Epoch: [17][200/352]	Loss 0.3250 (0.3768)	Accuracy 89.844 (86.964)	Time 2.43
+Epoch: [17][250/352]	Loss 0.4396 (0.3775)	Accuracy 84.375 (86.983)	Time 2.36
+Epoch: [17][300/352]	Loss 0.3200 (0.3752)	Accuracy 87.500 (86.986)	Time 2.42
+Epoch: [17][350/352]	Loss 0.3223 (0.3800)	Accuracy 90.625 (86.863)	Time 2.29
+train_accuracy 86.858
+Test: [0/40]	Loss 0.6425 (0.6425)	Accuracy 76.562 (76.562)
+valid_accuracy 80.560
+Test: [0/79]	Loss 0.6147 (0.6147)	Accuracy 77.344 (77.344)
+Test: [50/79]	Loss 0.8604 (0.6955)	Accuracy 75.781 (78.814)
+valid_accuracy 78.820
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10694967210292816
+0.1
+Epoch: [18][0/352]	Loss 0.3568 (0.3568)	Accuracy 83.594 (83.594)	Time 0.05
+Epoch: [18][50/352]	Loss 0.3766 (0.3571)	Accuracy 85.938 (87.331)	Time 2.32
+Epoch: [18][100/352]	Loss 0.3216 (0.3493)	Accuracy 88.281 (87.755)	Time 2.30
+Epoch: [18][150/352]	Loss 0.3498 (0.3499)	Accuracy 88.281 (87.614)	Time 2.30
+Epoch: [18][200/352]	Loss 0.3949 (0.3566)	Accuracy 85.938 (87.453)	Time 2.30
+Epoch: [18][250/352]	Loss 0.3297 (0.3608)	Accuracy 88.281 (87.394)	Time 2.30
+Epoch: [18][300/352]	Loss 0.3744 (0.3640)	Accuracy 87.500 (87.316)	Time 2.30
+Epoch: [18][350/352]	Loss 0.3992 (0.3678)	Accuracy 85.156 (87.151)	Time 2.30
+train_accuracy 87.147
+Test: [0/40]	Loss 0.5416 (0.5416)	Accuracy 86.719 (86.719)
+valid_accuracy 82.280
+Test: [0/79]	Loss 0.4578 (0.4578)	Accuracy 83.594 (83.594)
+Test: [50/79]	Loss 0.6216 (0.5691)	Accuracy 81.250 (81.373)
+valid_accuracy 81.340
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10793586075305939
+0.1
+Epoch: [19][0/352]	Loss 0.2873 (0.2873)	Accuracy 87.500 (87.500)	Time 0.05
+Epoch: [19][50/352]	Loss 0.4252 (0.3639)	Accuracy 84.375 (86.994)	Time 2.28
+Epoch: [19][100/352]	Loss 0.3690 (0.3629)	Accuracy 86.719 (87.113)	Time 2.30
+Epoch: [19][150/352]	Loss 0.3891 (0.3615)	Accuracy 88.281 (87.272)	Time 2.28
+Epoch: [19][200/352]	Loss 0.3902 (0.3649)	Accuracy 85.938 (87.294)	Time 2.28
+Epoch: [19][250/352]	Loss 0.2974 (0.3650)	Accuracy 92.969 (87.357)	Time 2.29
+Epoch: [19][300/352]	Loss 0.4238 (0.3679)	Accuracy 83.594 (87.300)	Time 2.28
+Epoch: [19][350/352]	Loss 0.4084 (0.3688)	Accuracy 85.156 (87.246)	Time 2.29
+train_accuracy 87.249
+Test: [0/40]	Loss 0.4357 (0.4357)	Accuracy 85.156 (85.156)
+valid_accuracy 83.360
+Test: [0/79]	Loss 0.4310 (0.4310)	Accuracy 83.594 (83.594)
+Test: [50/79]	Loss 0.6160 (0.5593)	Accuracy 81.250 (81.970)
+valid_accuracy 81.870
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10680771619081497
+0.1
+Epoch: [20][0/352]	Loss 0.3731 (0.3731)	Accuracy 88.281 (88.281)	Time 0.10
+Epoch: [20][50/352]	Loss 0.3864 (0.3662)	Accuracy 85.938 (87.714)	Time 2.28
+Epoch: [20][100/352]	Loss 0.3527 (0.3469)	Accuracy 88.281 (88.127)	Time 2.27
+Epoch: [20][150/352]	Loss 0.3102 (0.3421)	Accuracy 88.281 (88.312)	Time 2.27
+Epoch: [20][200/352]	Loss 0.3226 (0.3458)	Accuracy 91.406 (88.200)	Time 2.27
+Epoch: [20][250/352]	Loss 0.2560 (0.3521)	Accuracy 89.062 (87.961)	Time 2.26
+Epoch: [20][300/352]	Loss 0.5399 (0.3588)	Accuracy 82.812 (87.715)	Time 2.27
+Epoch: [20][350/352]	Loss 0.2362 (0.3601)	Accuracy 92.969 (87.647)	Time 2.27
+train_accuracy 87.638
+Test: [0/40]	Loss 0.3876 (0.3876)	Accuracy 86.719 (86.719)
+valid_accuracy 84.820
+Test: [0/79]	Loss 0.3679 (0.3679)	Accuracy 87.500 (87.500)
+Test: [50/79]	Loss 0.4657 (0.4653)	Accuracy 81.250 (84.191)
+valid_accuracy 84.290
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10884734243154526
+0.1
+Epoch: [21][0/352]	Loss 0.2805 (0.2805)	Accuracy 90.625 (90.625)	Time 0.06
+Epoch: [21][50/352]	Loss 0.3318 (0.3240)	Accuracy 87.500 (89.139)	Time 2.29
+Epoch: [21][100/352]	Loss 0.3475 (0.3251)	Accuracy 89.844 (88.815)	Time 2.27
+Epoch: [21][150/352]	Loss 0.2678 (0.3358)	Accuracy 89.844 (88.442)	Time 2.27
+Epoch: [21][200/352]	Loss 0.3373 (0.3441)	Accuracy 86.719 (88.200)	Time 2.28
+Epoch: [21][250/352]	Loss 0.3219 (0.3418)	Accuracy 89.062 (88.269)	Time 2.27
+Epoch: [21][300/352]	Loss 0.3910 (0.3491)	Accuracy 87.500 (87.993)	Time 2.27
+Epoch: [21][350/352]	Loss 0.5118 (0.3525)	Accuracy 80.469 (87.858)	Time 2.27
+train_accuracy 87.867
+Test: [0/40]	Loss 0.4373 (0.4373)	Accuracy 84.375 (84.375)
+valid_accuracy 83.800
+Test: [0/79]	Loss 0.4594 (0.4594)	Accuracy 85.156 (85.156)
+Test: [50/79]	Loss 0.5942 (0.5302)	Accuracy 81.250 (82.705)
+valid_accuracy 82.850
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10735311359167099
+0.1
+Epoch: [22][0/352]	Loss 0.2858 (0.2858)	Accuracy 89.062 (89.062)	Time 0.05
+Epoch: [22][50/352]	Loss 0.2753 (0.3272)	Accuracy 91.406 (88.680)	Time 2.30
+Epoch: [22][100/352]	Loss 0.3592 (0.3391)	Accuracy 85.938 (88.274)	Time 2.30
+Epoch: [22][150/352]	Loss 0.3535 (0.3386)	Accuracy 86.719 (88.271)	Time 2.29
+Epoch: [22][200/352]	Loss 0.3651 (0.3408)	Accuracy 86.719 (88.099)	Time 2.34
+Epoch: [22][250/352]	Loss 0.3891 (0.3405)	Accuracy 84.375 (88.085)	Time 2.28
+Epoch: [22][300/352]	Loss 0.3795 (0.3413)	Accuracy 87.500 (88.100)	Time 2.29
+Epoch: [22][350/352]	Loss 0.4693 (0.3432)	Accuracy 85.938 (88.083)	Time 2.28
+train_accuracy 88.084
+Test: [0/40]	Loss 0.4651 (0.4651)	Accuracy 82.812 (82.812)
+valid_accuracy 82.320
+Test: [0/79]	Loss 0.4036 (0.4036)	Accuracy 85.156 (85.156)
+Test: [50/79]	Loss 0.6883 (0.5564)	Accuracy 78.906 (82.108)
+valid_accuracy 82.030
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.10713645070791245
+0.1
+Epoch: [23][0/352]	Loss 0.3542 (0.3542)	Accuracy 86.719 (86.719)	Time 0.05
+Epoch: [23][50/352]	Loss 0.4486 (0.3176)	Accuracy 82.812 (88.986)	Time 2.08
+Epoch: [23][100/352]	Loss 0.3943 (0.3252)	Accuracy 88.281 (88.722)	Time 2.09
+Epoch: [23][150/352]	Loss 0.2498 (0.3294)	Accuracy 92.188 (88.581)	Time 2.08
+Epoch: [23][200/352]	Loss 0.2607 (0.3310)	Accuracy 90.625 (88.557)	Time 2.06
+Epoch: [23][250/352]	Loss 0.3553 (0.3315)	Accuracy 85.938 (88.474)	Time 2.07
+Epoch: [23][300/352]	Loss 0.3725 (0.3340)	Accuracy 88.281 (88.390)	Time 2.08
+Epoch: [23][350/352]	Loss 0.3803 (0.3362)	Accuracy 88.281 (88.355)	Time 2.07
+train_accuracy 88.356
+Test: [0/40]	Loss 0.4235 (0.4235)	Accuracy 88.281 (88.281)
+valid_accuracy 82.340
+Test: [0/79]	Loss 0.4645 (0.4645)	Accuracy 84.375 (84.375)
+Test: [50/79]	Loss 0.6315 (0.5591)	Accuracy 82.812 (81.878)
+valid_accuracy 81.840
+Apply Unstructured L1 Pruning
+Remove Pruning
+* current-mask-distance is = 0.1068226620554924
+0.1
+Epoch: [24][0/352]	Loss 0.3720 (0.3720)	Accuracy 86.719 (86.719)	Time 0.05
+Epoch: [24][50/352]	Loss 0.2462 (0.3094)	Accuracy 92.969 (89.139)	Time 2.40
+Epoch: [24][100/352]	Loss 0.3355 (0.3194)	Accuracy 83.594 (88.722)	Time 2.50
+Epoch: [24][150/352]	Loss 0.2409 (0.3251)	Accuracy 91.406 (88.607)	Time 2.32
+Epoch: [24][200/352]	Loss 0.3759 (0.3235)	Accuracy 86.719 (88.573)	Time 2.31
+Epoch: [24][250/352]	Loss 0.3167 (0.3263)	Accuracy 88.281 (88.393)	Time 2.31
+Epoch: [24][300/352]	Loss 0.2995 (0.3293)	Accuracy 87.500 (88.341)	Time 2.33
+Epoch: [24][350/352]	Loss 0.2704 (0.3298)	Accuracy 91.406 (88.397)	Time 2.35
+train_accuracy 88.400
+Test: [0/40]	Loss 0.6164 (0.6164)	Accuracy 79.688 (79.688)
