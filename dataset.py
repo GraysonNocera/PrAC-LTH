@@ -82,6 +82,7 @@ def mnist_dataloaders(batch_size=128, data_dir='datasets/mnist', dataset=False):
     # num_workers - how many subprocesses to use for data loading
     # drop_last - drop the last batch if it is incomplete
     # pin_memory - the data loader will copy tensors into CUDA pinned memory before returning them
+    # test
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=False, pin_memory=True)
     val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
