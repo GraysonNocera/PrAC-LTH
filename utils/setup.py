@@ -41,12 +41,21 @@ def setup_model_dataset(args, if_train_set=False):
         train_set_loader, val_loader, test_loader = tiny_imagenet_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set, split_file = args.split_file)
 
     elif args.dataset == 'mnist':
-        # TODO: figure out what numbers to put here
-        classes = 200
-        train_number = 90000
+        # train size - 50,000
+        # val size - 10,000
+        # test size - 10,000
+        # total - 70,000
+
+        classes = 10
+        train_number = 50000
+
+        # Should only have one channel for MNIST because black and white images, thus only one mean and one std
+        mnist_mean = 0.1307
+        mnist_std = 0.3081
         normalization = NormalizeByChannelMeanStd(
-            mean=[0.4802, 0.4481, 0.3975], std=[0.2302, 0.2265, 0.2262])
-        train_set_loader, val_loader, test_loader = tiny_imagenet_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set, split_file = args.split_file)
+            mean=[mnist_mean], std=[mnist_std])
+        
+        train_set_loader, val_loader, test_loader = mnist_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set, split_file = args.split_file)
 
     else:
         raise ValueError('unknown dataset')
