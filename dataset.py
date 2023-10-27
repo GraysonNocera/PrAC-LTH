@@ -4,8 +4,8 @@ from torchvision import transforms
 from torchvision.datasets import CIFAR10, CIFAR100, ImageFolder, MNIST
 from torch.utils.data import DataLoader, Subset
 
-__all__ = ['cifar10_dataloaders', 'cifar100_dataloaders', 'tiny_imagenet_dataloaders', 
-            'cifar10_dataloaders_val', 'cifar100_dataloaders_val', 'tiny_imagenet_dataloaders_val']
+__all__ = ['cifar10_dataloaders', 'cifar100_dataloaders', 'tiny_imagenet_dataloaders', 'mnist_dataloaders',
+            'cifar10_dataloaders_val', 'cifar100_dataloaders_val', 'tiny_imagenet_dataloaders_val', 'mnist_dataloaders_val']
 
 
 def cifar10_dataloaders(batch_size=128, data_dir='datasets/cifar10', dataset=False):
@@ -63,10 +63,9 @@ def cifar100_dataloaders(batch_size=128, data_dir='datasets/cifar100', dataset=F
         return train_loader, val_loader, test_loader
 
 def mnist_dataloaders(batch_size=128, data_dir='datasets/mnist', dataset=False):
-    # TODO: research what values to use here
 
     train_transform = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
+        transforms.RandomCrop(28, padding=4),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
     ])
@@ -75,16 +74,22 @@ def mnist_dataloaders(batch_size=128, data_dir='datasets/mnist', dataset=False):
         transforms.ToTensor(),
     ])
 
-    train_set = Subset(MNIST(data_dir, train=True, transform=train_transform, download=True), list(range(45000)))
-    val_set = Subset(MNIST(data_dir, train=True, transform=test_transform, download=True), list(range(45000, 50000)))
+    # Split into train, evaluation, and test sets
+    train_set = Subset(MNIST(data_dir, train=True, transform=train_transform, download=True), list(range(50000)))
+    val_set = Subset(MNIST(data_dir, train=True, transform=test_transform, download=True), list(range(50000, 60000)))
     test_set = MNIST(data_dir, train=False, transform=test_transform, download=True)
 
+    # num_workers - how many subprocesses to use for data loading
+    # drop_last - drop the last batch if it is incomplete
+    # pin_memory - the data loader will copy tensors into CUDA pinned memory before returning them
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2, drop_last=False, pin_memory=True)
     val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
 
     if dataset:
         print('return train dataset')
+
+        # Issue here? Aren't we overlapping the train dataset and the val loader?
         train_dataset = MNIST(data_dir, train=True, transform=train_transform, download=True)
         return train_dataset, val_loader, test_loader
     else:
@@ -144,6 +149,17 @@ def cifar100_dataloaders_val(batch_size=128, data_dir='datasets/cifar100'):
     ])
 
     train_set = Subset(CIFAR100(data_dir, train=True, transform=test_transform, download=True), list(range(45000)))
+    train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
+
+    return train_loader
+
+def mnist_dataloaders_val(batch_size=128, data_dir='datasets/mnist'):
+
+    test_transform = transforms.Compose([
+        transforms.ToTensor(),
+    ])
+
+    train_set = Subset(CIFAR100(data_dir, train=True, transform=test_transform, download=True), list(range(50000)))
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
 
     return train_loader

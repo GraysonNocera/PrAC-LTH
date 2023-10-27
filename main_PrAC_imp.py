@@ -259,7 +259,6 @@ def main():
         check_sparsity(model)                 
 
         # construct PrAC sets
-        # HERE IT IS
         example_wise_prediction = np.concatenate(example_wise_prediction, axis=1)
         print('* record size = {}'.format(example_wise_prediction.shape))
         sequence = sorted_examples(example_wise_prediction, args.data_prune, args.data_rate, state+1, args.threshold, train_number)
