@@ -134,7 +134,7 @@ def setup_model_dataset_PIE(args):
 
 
 
-# other function
+# other function (this is the most useless comennt ever)
 def forget_times(record_list):
     
     offset = 200000
@@ -156,9 +156,13 @@ def forget_times(record_list):
 
     return number
 
+# Is this where the actual pruning happens?
 def sorted_examples(example_wise_prediction, data_prune, data_rate, state, threshold, train_number):
 
-    offset = 200000
+    # Threshold for reamining forgetting events
+    # Looks like this is the first data slimming
+
+    offset = 200_000
 
     forgetting_events_number = np.zeros(example_wise_prediction.shape[0])
     for j in range(example_wise_prediction.shape[0]):

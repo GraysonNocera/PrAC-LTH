@@ -180,6 +180,7 @@ def main():
             # evaluate on test set
             test_tacc = validate(test_loader, model, criterion)
 
+            # Decays the learning rate after certain milestones
             scheduler.step()
 
             all_result['train'].append(acc)
@@ -191,10 +192,11 @@ def main():
             best_sa = max(tacc, best_sa)
 
             # Early Bird Tickets, check whether current mask is good enough
-            epoch_mask = return_current_mask(model, args.rate, pruned=state)
+            # early breaking, maybe we don't have to go up to the highest epoch but can move to the next pruning rate earlier
+            epoch_mask = return_current_mask(model, args.rate, pruned=state) # rate is the pruning rate
             if epoch:
                 hamming_dis = calculate_hamming_distance(last_mask, epoch_mask, remain_para)
-                start_record = start_record or (hamming_dis > args.eb_eps)
+                start_record = start_record or (hamming_dis > args.eb_eps) #eb_eps - epsilon for mask distance
                 if epoch > args.warmup and start_record:
                     distance_queue = FIFO(distance_queue, hamming_dis)
                 print('* current-mask-distance is = {}'.format(hamming_dis))
@@ -255,13 +257,20 @@ def main():
         if state:
             remove_prune(model)
         model.load_state_dict(initalization)
+
+        # Actual pruning? Based on L1 norm
         prune_model_custom(model, epoch_mask)   
+
         check_sparsity(model)                 
 
         # construct PrAC sets
+        # example_wise_prediction holds the epoch accuracy of training
         example_wise_prediction = np.concatenate(example_wise_prediction, axis=1)
         print('* record size = {}'.format(example_wise_prediction.shape))
+
+        # This may be where the actual pruning happens?
         sequence = sorted_examples(example_wise_prediction, args.data_prune, args.data_rate, state+1, args.threshold, train_number)
+
         if state:
             pie_index = prune_aware_example(os.path.join(args.save_dir, '0model_SA_best.pth.tar'), 
                 os.path.join(args.save_dir, str(state)+'model_SA_best.pth.tar'), criterion, args)
@@ -269,6 +278,7 @@ def main():
             sequence = concate_sequence(pie_sequence, sequence)
 
         # dynamic training iterations
+        # Just gaining training efficiency
         args.epochs = int(origin_epoch*sequence.shape[0]/train_number)
         decreasing_lr = [int(d*sequence.shape[0]/train_number) for d in origin_decreasing_lr]
         args.warmup = int(origin_warmup*sequence.shape[0]/train_number)

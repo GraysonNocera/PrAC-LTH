@@ -88,18 +88,24 @@ def check_sparsity(model):
             sum_list = sum_list+float(m.weight.nelement())
             zero_sum = zero_sum+float(torch.sum(m.weight == 0))  
 
+    # zero_sum / sum_list = percentage of weights that are 0
+    # 1 - that gives us the sparsity
     print('* remain weight = ', 100*(1-zero_sum/sum_list),'%')
     return 100*(1-zero_sum/sum_list)
 
 
 
 # Function for Early Bird Tickets
+# Early stopping: once the distance between sparsity masks (using Hamming distance)
+# reaches a certain threshold, then we interrupt training, prune the network, update sparsity mask, and use it for further retraining
 def return_current_mask(model, px, pruned=False):
     
     # save current state_dict
     checkpoint = copy.deepcopy(model.state_dict())
     if pruned:
         checkpoint_mask = extract_mask(checkpoint)
+
+    # pruning and then unpruning to get the mask?
 
     # get current mask 
     pruning_model(model, px)
@@ -125,6 +131,7 @@ def calculate_hamming_distance(last_mask, current_mask, remain_parameters):
 
     return hamming_distance
 
+# Count remaining parameters
 def cnt_remain_para(mask_dict):
 
     remain_para = 0
