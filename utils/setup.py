@@ -20,6 +20,9 @@ __all__ = ['setup_model_dataset', 'setup_model_dataset_PIE',
 def setup_model_dataset(args, if_train_set=False):
 
     if args.dataset == 'cifar10':
+        # 60,000 32x32 color images in 10 classes (6000 per class)
+        # 50,000 training images and 10,000 test images
+
         classes = 10
         train_number = 45000
         normalization = NormalizeByChannelMeanStd(
@@ -136,6 +139,9 @@ def setup_model_dataset_PIE(args):
 
 # other function (this is the most useless comennt ever)
 def forget_times(record_list):
+
+    # Going through the epochs and seeing how many times the model swapped its bet
+    # I.E. if it guessed the first time right then wrong second time, +1 
     
     offset = 200000
     number = offset
@@ -172,14 +178,16 @@ def sorted_examples(example_wise_prediction, data_prune, data_rate, state, thres
         else:
             forgetting_events_number[j] = forget_times(tmp_data)
 
+    # forgetting_events_number holds 50,000 items of how much each sample is forgotten
+
     # print('* never learned image number = {}'.format(np.where(forgetting_events_number==offset)[0].shape[0]))
 
     if data_prune == 'constent':
         print('* pruning {} data'.format(data_rate))
         rest_number = int(train_number*(1-data_rate)**state)
     elif data_prune == 'zero_out':
-        print('zero all unforgettable images out')
         rest_number = np.where(forgetting_events_number > threshold)[0].shape[0]
+        print('zero all unforgettable images out, rest number = ', rest_number)
     else:
         print('error data_prune type')
         assert False

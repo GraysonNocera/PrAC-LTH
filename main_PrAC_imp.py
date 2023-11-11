@@ -152,6 +152,14 @@ def main():
         start_state = 0
         sequence = np.load(args.split_file)[:train_number]
 
+
+    ## MY CODE ##
+    forgetting_num = [] # forgetting statistics data points
+    pie_num = [] # pruned model vs. entire model data points
+    model_sparsities = []
+    dataset = args.dataset
+    ## END MY CODE ##
+
     print('######################################## Start Standard Training Iterative Pruning ########################################')
 
     for state in range(start_state, args.pruning_times):
@@ -231,6 +239,9 @@ def main():
             plt.plot(all_result['ta'], label='val_acc')
             plt.plot(all_result['test_ta'], label='test_acc')
             plt.legend()
+            plt.yticks(np.arange(0, 101, 5))
+            plt.ylabel("Accuracy (%)")
+            plt.xlabel("Epoch")
             plt.savefig(os.path.join(args.save_dir, str(state)+'net_train.png'))
             plt.close()
 
@@ -260,22 +271,34 @@ def main():
 
         # Actual pruning? Based on L1 norm
         prune_model_custom(model, epoch_mask)   
-
-        check_sparsity(model)                 
+ 
+        model_sparsities.append(check_sparsity(model))               
 
         # construct PrAC sets
-        # example_wise_prediction holds the epoch accuracy of training
+        # example_wise_prediction holds the predictions of all 50,000 trained images for each epoch
+        # hence, size is (50,000, num_epochs_in_this_state) - I think these are 0 or 1s based on if it was correct
         example_wise_prediction = np.concatenate(example_wise_prediction, axis=1)
         print('* record size = {}'.format(example_wise_prediction.shape))
 
         # This may be where the actual pruning happens?
         sequence = sorted_examples(example_wise_prediction, args.data_prune, args.data_rate, state+1, args.threshold, train_number)
+        forgetting_num.append(len(list(sequence)))
 
         if state:
+            # This is the second round of pruning
             pie_index = prune_aware_example(os.path.join(args.save_dir, '0model_SA_best.pth.tar'), 
                 os.path.join(args.save_dir, str(state)+'model_SA_best.pth.tar'), criterion, args)
             pie_sequence = np.load(args.split_file)[pie_index]
+
+            print("Number of samples in both types of data: ", np.sum(pie_sequence == sequence))
+            pie_num.append(len(list(pie_sequence)))
+
+            # Combining the two types of data from the two prunings
+            # pie_sequence - Pruning where check between subnetwork and full model prediction
+            # sequence (main_sequence) - Pruning where we check the forgetting statistics
             sequence = concate_sequence(pie_sequence, sequence)
+        else:
+            pie_num.append(0)
 
         # dynamic training iterations
         # Just gaining training efficiency
@@ -289,6 +312,10 @@ def main():
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=decreasing_lr, gamma=0.1)
 
         example_wise_prediction = []
+
+    print("forgetting numbers: ", forgetting_num)
+    print("pie num: ", pie_num)
+    print("model sparsities: ", model_sparsities)
 
 def train(trainset, model, criterion, optimizer, epoch, sequence):
     
@@ -455,6 +482,8 @@ def validate_PIE(val_loader, model, criterion):
 
 def prune_aware_example(full_model_path, prune_model_path, criterion, args):
 
+    # Other pruning for critical set here
+
     # re-define model and loader
     test_model, test_train_loader = setup_model_dataset_PIE(args)
     test_model.cuda()
@@ -486,6 +515,8 @@ def concate_sequence(pie_sequence, main_sequence):
     print('* Critical examples for training = {}'.format(len(main_sequence)))
 
     main_sequence.extend(pie_sequence)
+
+    # Removes duplicates
     main_sequence = np.array(list(set(main_sequence)))
 
     print('* PrAC images = {}'.format(main_sequence.shape[0]))
