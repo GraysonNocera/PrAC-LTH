@@ -20,7 +20,7 @@ def write():
 
   # train = train_set.dataset.data
   print(np.arange(0,60000))
-  np.save("npy_files/mnist-train-val.npy", np.arange(0,50000))
+  np.save("npy_files/mnist-train-val.npy", np.arange(0,60000))
 
 
 def read():
