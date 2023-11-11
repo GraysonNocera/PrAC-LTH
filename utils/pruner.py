@@ -94,7 +94,6 @@ def check_sparsity(model):
     return 100*(1-zero_sum/sum_list)
 
 
-
 # Function for Early Bird Tickets
 # Early stopping: once the distance between sparsity masks (using Hamming distance)
 # reaches a certain threshold, then we interrupt training, prune the network, update sparsity mask, and use it for further retraining

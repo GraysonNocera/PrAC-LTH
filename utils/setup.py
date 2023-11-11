@@ -22,7 +22,7 @@ def setup_model_dataset(args, if_train_set=False):
     if args.dataset == 'cifar10':
         # 60,000 32x32 color images in 10 classes (6000 per class)
         # 50,000 training images and 10,000 test images
-
+ 
         classes = 10
         train_number = 45000
         normalization = NormalizeByChannelMeanStd(

@@ -156,6 +156,7 @@ def main():
     ## MY CODE ##
     forgetting_num = [] # forgetting statistics data points
     pie_num = [] # pruned model vs. entire model data points
+    both_num = []
     model_sparsities = []
     dataset = args.dataset
     ## END MY CODE ##
@@ -272,7 +273,7 @@ def main():
         # Actual pruning? Based on L1 norm
         prune_model_custom(model, epoch_mask)   
  
-        model_sparsities.append(check_sparsity(model))               
+        model_sparsities.append(100 - check_sparsity(model))               
 
         # construct PrAC sets
         # example_wise_prediction holds the predictions of all 50,000 trained images for each epoch
@@ -290,8 +291,11 @@ def main():
                 os.path.join(args.save_dir, str(state)+'model_SA_best.pth.tar'), criterion, args)
             pie_sequence = np.load(args.split_file)[pie_index]
 
-            print("Number of samples in both types of data: ", np.sum(pie_sequence == sequence))
+            tmp_list = list(sequence).extend(list(pie_sequence))
+            tmp_set_list = list(set(list(sequence).extend(list(pie_sequence))))
+            print("Number of samples in both types of data: ", len(tmp_list) - len(tmp_set_list))
             pie_num.append(len(list(pie_sequence)))
+            both_num.append(len(tmp_list) - len(tmp_set_list))
 
             # Combining the two types of data from the two prunings
             # pie_sequence - Pruning where check between subnetwork and full model prediction
@@ -299,6 +303,7 @@ def main():
             sequence = concate_sequence(pie_sequence, sequence)
         else:
             pie_num.append(0)
+            both_num.append(0)
 
         # dynamic training iterations
         # Just gaining training efficiency
@@ -316,6 +321,35 @@ def main():
     print("forgetting numbers: ", forgetting_num)
     print("pie num: ", pie_num)
     print("model sparsities: ", model_sparsities)
+
+    plot_data_types_for_dataset(forgetting_num, pie_num, model_sparsities, dataset)
+
+def plot_data_types_for_dataset(forgetting_num, pie_num, model_sparsities, dataset):
+
+    x = np.arange(len(model_sparsities))  # the label locations
+    width = 0.25  # the width of the bars
+    multiplier = 0
+
+    fig, ax = plt.subplots(layout='constrained')
+
+    dictionary = {
+        "Hard to memorize": forgetting_num,
+        "Easy to forget": pie_num
+    }
+    for attribute, measurement in dictionary.items():
+        offset = width * multiplier
+        rects = ax.bar(x + offset, measurement, width, label=attribute)
+        ax.bar_label(rects, padding=3)
+        multiplier += 1
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel('Number of samples')
+    ax.set_title(f'Prevelance of Different Categories of Data for Dataset {dataset}')
+    ax.set_xticks(x + width, model_sparsities)
+    ax.set_xlabel("Model sparsities")
+    ax.legend(loc='upper left', ncols=3)
+    # ax.set_ylim(0, 250)
+    plt.savefig(os.path.join(args.save_dir, "data_types_sparsities.png"))
 
 def train(trainset, model, criterion, optimizer, epoch, sequence):
     
