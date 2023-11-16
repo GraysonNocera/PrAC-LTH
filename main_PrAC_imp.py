@@ -58,6 +58,7 @@ parser.add_argument('--eb_eps', default=0.08, type=float, help='epsilon for mask
 parser.add_argument('--queue_length', default=5, type=int, help='distance queue length')
 parser.add_argument('--prune_type', default='lt', type=str, help='IMP type (lt, rewind_lt)')
 parser.add_argument('--rewind_epoch', default=2, type=int, help='rewind checkpoint ')
+parser.add_argument('--core_set_method', default="both", type=str, help="How to form the pruning aware critical set (both, easy_to_forget, hard_to_memorize)")
 
 ##################################### Data pruning setting ##############################################
 parser.add_argument('--data_prune', default='zero_out', type=str, help='data_prune type (zero_out, constent)')
@@ -243,6 +244,7 @@ def main():
             plt.yticks(np.arange(0, 101, 5))
             plt.ylabel("Accuracy (%)")
             plt.xlabel("Epoch")
+            plt.title(f"Accuracy at Pruning Stage {state}")
             plt.savefig(os.path.join(args.save_dir, str(state)+'net_train.png'))
             plt.close()
 
@@ -282,20 +284,33 @@ def main():
         print('* record size = {}'.format(example_wise_prediction.shape))
 
         # This may be where the actual pruning happens?
-        sequence = sorted_examples(example_wise_prediction, args.data_prune, args.data_rate, state+1, args.threshold, train_number)
+        sequence = sorted_examples(example_wise_prediction, args.data_prune, args.data_rate, state+1, args.threshold, train_number, args.core_set_method)
         forgetting_num.append(len(list(sequence)))
 
         if state:
             # This is the second round of pruning
             pie_index = prune_aware_example(os.path.join(args.save_dir, '0model_SA_best.pth.tar'), 
                 os.path.join(args.save_dir, str(state)+'model_SA_best.pth.tar'), criterion, args)
+            
+            # Loading all of them but only picking the ones that don't match pruned vs full
             pie_sequence = np.load(args.split_file)[pie_index]
 
-            tmp_list = list(sequence).extend(list(pie_sequence))
-            tmp_set_list = list(set(list(sequence).extend(list(pie_sequence))))
-            print("Number of samples in both types of data: ", len(tmp_list) - len(tmp_set_list))
-            pie_num.append(len(list(pie_sequence)))
-            both_num.append(len(tmp_list) - len(tmp_set_list))
+            try:
+                if len(sequence) > 0 and len(pie_sequence) > 0:
+                    tmp_list = list(sequence).extend(list(pie_sequence))
+                    tmp_set_list = list(set(list(sequence).extend(list(pie_sequence))))
+                    print("Number of samples in both types of data: ", len(tmp_list) - len(tmp_set_list))
+                    pie_num.append(len(list(pie_sequence)))
+                    both_num.append(len(tmp_list) - len(tmp_set_list))
+                else:
+                    pie_num.append(len(list(pie_sequence)))
+                    both_num.append(0)
+            except:
+                print(sequence)
+                print(pie_sequence)
+                pie_num.append(len(list(pie_sequence)))
+                both_num.append(0)
+                    
 
             # Combining the two types of data from the two prunings
             # pie_sequence - Pruning where check between subnetwork and full model prediction
@@ -322,34 +337,21 @@ def main():
     print("pie num: ", pie_num)
     print("model sparsities: ", model_sparsities)
 
-    plot_data_types_for_dataset(forgetting_num, pie_num, model_sparsities, dataset)
+    plot_data_types_for_dataset(forgetting_num, pie_num, model_sparsities, dataset, args.save_dir)
 
-def plot_data_types_for_dataset(forgetting_num, pie_num, model_sparsities, dataset):
+def plot_data_types_for_dataset(forgetting_num, pie_num, model_sparsities, dataset, save_dir):
 
-    x = np.arange(len(model_sparsities))  # the label locations
-    width = 0.25  # the width of the bars
-    multiplier = 0
+    width = 2
+    model_sparsities = [x - width/2 for x in model_sparsities]
+    plt.bar(model_sparsities, forgetting_num, width=width)
+    model_sparsities = [x + width for x in model_sparsities]
+    plt.bar(model_sparsities, pie_num, width=width)
+    plt.title(f"Comparison of Data Types for {dataset}")
+    plt.xlabel("Model Sparsities (%)")
+    plt.ylabel("Number of Data Points")
+    plt.legend(["Hard to Memorize", "Easy to Forget"])
+    plt.savefig(os.path.join(save_dir, f"data_types_sparsities_{dataset}.png"))
 
-    fig, ax = plt.subplots(layout='constrained')
-
-    dictionary = {
-        "Hard to memorize": forgetting_num,
-        "Easy to forget": pie_num
-    }
-    for attribute, measurement in dictionary.items():
-        offset = width * multiplier
-        rects = ax.bar(x + offset, measurement, width, label=attribute)
-        ax.bar_label(rects, padding=3)
-        multiplier += 1
-
-    # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('Number of samples')
-    ax.set_title(f'Prevelance of Different Categories of Data for Dataset {dataset}')
-    ax.set_xticks(x + width, model_sparsities)
-    ax.set_xlabel("Model sparsities")
-    ax.legend(loc='upper left', ncols=3)
-    # ax.set_ylim(0, 250)
-    plt.savefig(os.path.join(args.save_dir, "data_types_sparsities.png"))
 
 def train(trainset, model, criterion, optimizer, epoch, sequence):
     
@@ -534,6 +536,10 @@ def prune_aware_example(full_model_path, prune_model_path, criterion, args):
     prune_model_train_predict = validate_PIE(test_train_loader, test_model, criterion)
 
     pie_example = (full_model_train_predict == prune_model_train_predict).float()
+    if (args.core_set_method == "hard_to_memorize"):
+        # we don't rule out any if they don't want to use this pruning method
+        pie_example = (full_model_train_predict == full_model_train_predict).float()
+
     pie_example = 1 - pie_example
     pie_example = pie_example.nonzero().reshape(-1)
     pie_example = pie_example.numpy()
