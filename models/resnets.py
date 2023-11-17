@@ -80,14 +80,14 @@ class BasicBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10):
+    def __init__(self, block, num_blocks, num_classes=10, in_channels=3):
         super(ResNet, self).__init__()
         self.in_planes = 16
 
         self.normalize = NormalizeByChannelMeanStd(
             mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
 
-        self.conv1 = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(in_channels, 16, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(16)
         self.layer1 = self._make_layer(block, 16, num_blocks[0], stride=1)
         self.layer2 = self._make_layer(block, 32, num_blocks[1], stride=2)
@@ -117,26 +117,26 @@ class ResNet(nn.Module):
         return out
 
 
-def resnet20(number_class=10):
-    return ResNet(BasicBlock, [3, 3, 3], num_classes=number_class)
+def resnet20(number_class=10, in_channels=3):
+    return ResNet(BasicBlock, [3, 3, 3], num_classes=number_class, in_channels=in_channels)
 
 
-def resnet32(number_class=10):
-    return ResNet(BasicBlock, [5, 5, 5], num_classes=number_class)
+def resnet32(number_class=10, in_channels=3):
+    return ResNet(BasicBlock, [5, 5, 5], num_classes=number_class, in_channels=in_channels)
 
 
-def resnet44(number_class=10):
-    return ResNet(BasicBlock, [7, 7, 7], num_classes=number_class)
+def resnet44(number_class=10, in_channels=3):
+    return ResNet(BasicBlock, [7, 7, 7], num_classes=number_class, in_channels=in_channels)
 
 
-def resnet56(number_class=10):
-    return ResNet(BasicBlock, [9, 9, 9], num_classes=number_class)
+def resnet56(number_class=10, in_channels=3):
+    return ResNet(BasicBlock, [9, 9, 9], num_classes=number_class, in_channels=in_channels)
 
 
-def resnet110(number_class=10):
-    return ResNet(BasicBlock, [18, 18, 18], num_classes=number_class)
+def resnet110(number_class=10, in_channels=3):
+    return ResNet(BasicBlock, [18, 18, 18], num_classes=number_class, in_channels=in_channels)
 
 
-def resnet1202(number_class=10):
-    return ResNet(BasicBlock, [200, 200, 200], num_classes=number_class)
+def resnet1202(number_class=10, in_channels=3):
+    return ResNet(BasicBlock, [200, 200, 200], num_classes=number_class, in_channels=in_channels)
 
