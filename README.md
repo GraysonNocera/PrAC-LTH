@@ -1,89 +1,67 @@
-# Efficient Lottery Ticket Finding: Less Data is More
+# Finding Critical Sets for Training Pruned Deep Neural Networks
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+## Experiment Instructions
 
-Codes for this paper [Efficient Lottery Ticket Finding: Less Data is More.](http://arxiv.org/abs/2106.03225) [ICML 2021]
+To run the experiments, complete the following steps:
+1. Install the dependencies in `requirements.txt` or activate the included virtual environment using ``source venv/bin/activate``.
+2. Make this addition to the advertorch library (in file ``advertorch/attacks/fast_adaptive_boundary.py``) to fix an error:
 
-Zhenyu Zhang\*, Xuxi Chen\*, Tianlong Chen\*, Zhangyang Wang
+![Fix Advertorch Dependency Error](./fixing-dep.png)
 
+3. Utilize the CLI defined in `main_PrAC_imp.py`.
 
+## Example Usage
 
-## Overview
+To run the PrAC-LTH algorithm on CIFAR-10 with ResNet-20, use the following command:
+``python -u main_PrAC_imp.py --data data/cifar10 --dataset cifar10 --arch res20s --split_file npy_files/cifar10-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir cifar10_res20s_prac_imp``
 
-The lottery ticket hypothesis (LTH) reveals the existence of winning tickets (sparse but critical subnetworks) for dense networks, that can be trained in isolation from random initialization to match the latter’s accuracies. However, finding winning tickets requires burdensome computations in the train-prune-retrain process, especially on large-scale datasets (e.g., ImageNet), restricting their practical benefits. This paper explores a new perspective on finding lottery tickets more efficiently, by doing so only with a specially selected subset of data, called Pruning- Aware Critical set (PrAC set), rather than using the full training set. The concept of PrAC set was inspired by the recent observation, that deep networks have samples that are either *hard to memorize* during training, or *easy to forget* during pruning. A PrAC set is thus hypothesized to capture those most challenging and informative examples for the dense model. We observe that a high-quality winning ticket can be found with training and pruning the dense network on the very compact PrAC set, which can substantially save training iterations for the ticket finding process.
+To run a modified version of Algorithm 1 with only hard to memorize samples included in the critical set, use the following command:
+``python -u main_PrAC_imp.py --core_set_method hard_to_memorize --data data/cifar10 --dataset cifar10 --arch res20s --split_file npy_files/cifar10-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir cifar10_hard_to_memorize``
 
-<img src = "Figs/prac_main.png" align = "center" width="50%" hight="60%">
+## Distribution of Code
+This code has been forked from the researcher's implementation [here](https://github.com/VITA-Group/PrAC-LTH). The files that have been modified are:
+- `main_PrAC_imp.py`
+	- This file was modified to accomodate the MNIST dataset as well as to add a command line argument to run modified 
+	versions of Algorithm 1. Furthermore, significant log statements were added to track the progress of the algorithm, 
+	the critical set, and the time of execution.
+- `utils/setup.py`
+	- This file was edited to add the MNIST dataset. Specifically, the data was normalized before being passed into a dataset 
+	loader from Pytorch. Additionally, an argument was added to the model to allow for the input channels to change, as 
+	the researchers used data that used three input channels, while MNIST only has one input channel.
+- `dataset.py`
+	- This file was edited to add the MNIST dataset. The data was first transformed using Pytorch transforms. Then, it was 
+	split into train, test, and validation sets and passed through a dataset loader from Pytorch. This process was added for 
+	the MNIST dataset.
+- `utils/pruner.py`
+	- A few comments were added to this file to better understand it.
+- `.gitignore`
+	- This file was edited to ignore the virtual environment that was created and the large tar files used in training.
 
-## Prerequisites
+The files that have been added are:
+- `utils/save_files.py`
+- `utils/runner.py`
+- `utils/compare-bars.py`
+- `utils/compare_acc.py`
+- `utils/requirements.txt`
+- `experiments/mnist_test.py`
+- `experiments/testing_bars.py`
+- `experiments/figures/mnist.png`
+- ``npy_files/mnist-train-val.npy``
 
-```
-Pytorch >= 1.4
+The remaining files are the same as the original implementation [here](https://github.com/VITA-Group/PrAC-LTH).
 
-torchvision
+## Description of Datasets
 
-advertorch
-```
+The datasets used for these experiments are MNIST, CIFAR-10, and CIFAR-100.
 
-## Usage
+### MNIST
 
-#### Vanilla Lottery Tickets
+The MNIST dataset is a dataset of black and white handwritten digits. It contains 60,000 training images and 10,000 testing images. Each image is 28x28 pixels. The dataset is split into 10 classes, one for each digit. It is available via Pytorch.
 
-```
-python -u main_imp.py \
-	--data data/cifar10 \
-	--dataset cifar10 \
-	--arch res20s \
-	--batch_size 128 \
-	--lr 0.1 \
-	--pruning_times 16 \
-	--prune_type rewind_lt \
-	--rewind_epoch 2 \
-	--save_dir lt_cifar10_res20s
-```
+### CIFAR-10
 
-#### PrAC Lottery Tickets
+The CIFAR-10 dataset is a dataset of 60,000 32x32 color images in 10 classes, with 6,000 images per class. There are 50,000 training images and 10,000 test images. The dataset is split into 10 classes, each describing common, everyday objects. It is available via Pytorch.
 
-```
-python -u main_PrAC_imp.py \
-	--data data/cifar10 \
-	--dataset cifar10 \
-	--arch res20s \
-	--split_file npy_files/cifar10-train-val.npy \
-	--batch_size 128 \
-	--lr 0.1 \
-	--pruning_times 16 \
-	--eb_eps 0.08 \
-	--prune_type rewind_lt \
-	--rewind_epoch 2 \
-	--threshold 0 \
-	--save_dir PrAC_lt_cifar10_res20s
-	
-```
+### CIFAR-100
 
-#### Train subnetworks 
-
-```
-python -u main_train.py \
-	--data data/cifar10 \
-	--dataset cifar10 \
-	--arch res20s \
-	--batch_size 128 \
-	--lr 0.1 \
-	--init_dir PrAC_lt_cifar10_res20s/1checkpoint.pth.tar \ 
-	--mask_dir PrAC_lt_cifar10_res20s/1checkpoint.pth.tar \ # sparsity=20%
-	--save_dir retrain_PrAC_lt_cifar10_res20s/1
-```
-
-## Citation
-
-```
-@misc{zhang2021efficient,
-      title={Efficient Lottery Ticket Finding: Less Data is More}, 
-      author={Zhenyu Zhang and Xuxi Chen and Tianlong Chen and Zhangyang Wang},
-      year={2021},
-      eprint={2106.03225},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
-}
-```
-
+The CIFAR-100 dataset is a dataset of 60,000 32x32 color images in 100 classes, with 600 images per class. There are 50,000 training images and 10,000 test images. The dataset is split into 100 classes and 20 superclasses. Each image comes with a "fine" label, describing its class, and a "coarse" label, describing its superclass. It is available via Pytorch.
