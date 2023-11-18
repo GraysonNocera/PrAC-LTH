@@ -22,12 +22,15 @@ def setup_model_dataset(args, if_train_set=False):
     if args.dataset == 'cifar10':
         # 60,000 32x32 color images in 10 classes (6000 per class)
         # 50,000 training images and 10,000 test images
+        # In our case, 45,000 for training, 5,000 for evaluation, and 10,000 for testing
  
         classes = 10
         train_number = 45000
         normalization = NormalizeByChannelMeanStd(
             mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
         train_set_loader, val_loader, test_loader = cifar10_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set)
+
+        in_channels = 3
 
     elif args.dataset == 'cifar100':
         classes = 100
@@ -36,12 +39,16 @@ def setup_model_dataset(args, if_train_set=False):
             mean=[0.5071, 0.4866, 0.4409], std=[0.2673,	0.2564,	0.2762])
         train_set_loader, val_loader, test_loader = cifar100_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set)
 
+        in_channels = 3
+
     elif args.dataset == 'tiny-imagenet':
         classes = 200
         train_number = 90000
         normalization = NormalizeByChannelMeanStd(
             mean=[0.4802, 0.4481, 0.3975], std=[0.2302, 0.2265, 0.2262])
         train_set_loader, val_loader, test_loader = tiny_imagenet_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set, split_file = args.split_file)
+
+        in_channels = 3
 
     elif args.dataset == 'mnist':
         # train size - 50,000
@@ -50,7 +57,7 @@ def setup_model_dataset(args, if_train_set=False):
         # total - 70,000
 
         classes = 10
-        train_number = 50000
+        train_number = 50_000
 
         # Should only have one channel for MNIST because black and white images, thus only one mean and one std
         mnist_mean = 0.1307
@@ -58,7 +65,8 @@ def setup_model_dataset(args, if_train_set=False):
         normalization = NormalizeByChannelMeanStd(
             mean=[mnist_mean], std=[mnist_std])
         
-        train_set_loader, val_loader, test_loader = mnist_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set, split_file = args.split_file)
+        train_set_loader, val_loader, test_loader = mnist_dataloaders(batch_size = args.batch_size, data_dir = args.data, dataset = if_train_set)
+        in_channels = 1
 
     else:
         raise ValueError('unknown dataset')
@@ -71,10 +79,10 @@ def setup_model_dataset(args, if_train_set=False):
         model = resnet50(num_classes=classes, imagenet=True)
     elif args.arch == 'res20s':
         print('build model: resnet20')
-        model = resnet20(number_class=classes)
+        model = resnet20(number_class=classes, in_channels=in_channels)
     elif args.arch == 'res56s':
         print('build model: resnet56')
-        model = resnet56(number_class=classes)
+        model = resnet56(number_class=classes, in_channels=in_channels)
     elif args.arch == 'vgg16_bn':
         print('build model: vgg16_bn')
         model = vgg16_bn(num_classes=classes)
@@ -90,6 +98,8 @@ def setup_model_dataset(args, if_train_set=False):
 
 
 def setup_model_dataset_PIE(args):
+
+    in_channels = 3
 
     if args.dataset == 'cifar10':
         classes = 10
@@ -109,6 +119,26 @@ def setup_model_dataset_PIE(args):
             mean=[0.4802, 0.4481, 0.3975], std=[0.2302, 0.2265, 0.2262])
         train_loader = tiny_imagenet_dataloaders_val(batch_size = args.batch_size, data_dir = args.data, split_file=args.split_file)
 
+    elif args.dataset == 'mnist':
+        # train size - 50,000
+        # val size - 10,000
+        # test size - 10,000
+        # total - 70,000
+
+        print("Setting up mnist dataset")
+
+        classes = 10
+        train_number = 50000
+
+        # Should only have one channel for MNIST because black and white images, thus only one mean and one std
+        mnist_mean = 0.1307
+        mnist_std = 0.3081
+        normalization = NormalizeByChannelMeanStd(
+            mean=[mnist_mean], std=[mnist_std])
+        
+        train_loader = mnist_dataloaders_val(batch_size= args.batch_size, data_dir=args.data)
+        in_channels = 1
+
     else:
         raise ValueError('unknow dataset')
 
@@ -120,7 +150,7 @@ def setup_model_dataset_PIE(args):
         model = resnet50(num_classes=classes, imagenet=True)
     elif args.arch == 'res20s':
         print('build model: resnet20')
-        model = resnet20(number_class=classes)
+        model = resnet20(number_class=classes, in_channels=in_channels)
     elif args.arch == 'res56s':
         print('build model: resnet56')
         model = resnet56(number_class=classes)
@@ -163,7 +193,7 @@ def forget_times(record_list):
     return number
 
 # Is this where the actual pruning happens?
-def sorted_examples(example_wise_prediction, data_prune, data_rate, state, threshold, train_number):
+def sorted_examples(example_wise_prediction, data_prune, data_rate, state, threshold, train_number, core_set_method):
 
     # Threshold for reamining forgetting events
     # Looks like this is the first data slimming
@@ -179,6 +209,7 @@ def sorted_examples(example_wise_prediction, data_prune, data_rate, state, thres
             forgetting_events_number[j] = forget_times(tmp_data)
 
     # forgetting_events_number holds 50,000 items of how much each sample is forgotten
+    # rest_number - how many to keep
 
     # print('* never learned image number = {}'.format(np.where(forgetting_events_number==offset)[0].shape[0]))
 
@@ -187,6 +218,7 @@ def sorted_examples(example_wise_prediction, data_prune, data_rate, state, thres
         rest_number = int(train_number*(1-data_rate)**state)
     elif data_prune == 'zero_out':
         rest_number = np.where(forgetting_events_number > threshold)[0].shape[0]
+
         print('zero all unforgettable images out, rest number = ', rest_number)
     else:
         print('error data_prune type')
@@ -194,6 +226,9 @@ def sorted_examples(example_wise_prediction, data_prune, data_rate, state, thres
 
     # print('max forgetting times = {}'.format(np.max(forgetting_events_number)))
     selected_index = np.argsort(forgetting_events_number)[-rest_number:]
+    
+    if core_set_method == "easy_to_forget": # we are not using this method
+        selected_index = np.array([])
 
     return selected_index
 

@@ -29,8 +29,8 @@ def cifar10_dataloaders(batch_size=128, data_dir='datasets/cifar10', dataset=Fal
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
 
     if dataset:
-        print('return train dataset')
         train_dataset = CIFAR10(data_dir, train=True, transform=train_transform, download=True)
+        print('return train dataset: ', len(train_dataset))
         return train_dataset, val_loader, test_loader
     else:
         return train_loader, val_loader, test_loader
@@ -56,8 +56,8 @@ def cifar100_dataloaders(batch_size=128, data_dir='datasets/cifar100', dataset=F
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
 
     if dataset:
-        print('return train dataset')
         train_dataset = CIFAR100(data_dir, train=True, transform=train_transform, download=True)
+        print('return train dataset: ', len(train_dataset))
         return train_dataset, val_loader, test_loader
     else:
         return train_loader, val_loader, test_loader
@@ -88,10 +88,8 @@ def mnist_dataloaders(batch_size=128, data_dir='datasets/mnist', dataset=False):
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
 
     if dataset:
-        print('return train dataset')
-
-        # Issue here? Aren't we overlapping the train dataset and the val loader?
         train_dataset = MNIST(data_dir, train=True, transform=train_transform, download=True)
+        print('return train dataset: ', len(train_dataset))
         return train_dataset, val_loader, test_loader
     else:
         return train_loader, val_loader, test_loader
@@ -124,8 +122,8 @@ def tiny_imagenet_dataloaders(batch_size=64, data_dir='datasets/tiny-imagenet-20
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
 
     if dataset:
-        print('return train dataset')
         train_dataset = ImageFolder(train_path, transform=train_transform)
+        print('return train dataset: ', len(train_dataset))
         return train_dataset, val_loader, test_loader
     else:
         return train_loader, val_loader, test_loader
@@ -160,7 +158,7 @@ def mnist_dataloaders_val(batch_size=128, data_dir='datasets/mnist'):
         transforms.ToTensor(),
     ])
 
-    train_set = Subset(CIFAR100(data_dir, train=True, transform=test_transform, download=True), list(range(50000)))
+    train_set = Subset(MNIST(data_dir, train=True, transform=test_transform, download=True), list(range(50_000)))
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=False, num_workers=2, pin_memory=True)
 
     return train_loader

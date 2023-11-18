@@ -37,3 +37,7 @@ Print out a couple samples from each type of data for each dataset
 Hypothesize that the hard to memorize samples are the most important and don't need to include the other ones.
 
 Idea for experiment: find the classification that has the greatest error rate in testing and include more of those in the PrAC set.
+
+
+
+To include in the final paper: 3 bar charts, accuracies of CIFAR10/CIFAR100 with three types of experiments, comparison of time?

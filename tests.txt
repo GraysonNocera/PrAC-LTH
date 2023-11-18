@@ -1,6 +1,9 @@
 mkdir mnist_with_bars
 python -u main_PrAC_imp.py --data data/mnist --dataset mnist --arch res20s --split_file npy_files/mnist-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir mnist_with_bars > mnist_with_bars/output.log
 
+mkdir tiny_imagenet_with_bars
+python -u main_PrAC_imp.py --data data/tiny-imagenet --dataset tiny-imagenet --arch res20s --split_file npy_files/tiny-imagenet-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir tiny_imagenet_with_bars > tiny_imagenet_with_bars/output.log
+
 mkdir cifar10_easy_to_forget
 python -u main_PrAC_imp.py --core_set_method easy_to_forget --data data/cifar10 --dataset cifar10 --arch res20s --split_file npy_files/cifar10-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir cifar10_easy_to_forget > cifar10_easy_to_forget/output.log
 
@@ -10,9 +13,8 @@ python -u main_PrAC_imp.py --core_set_method hard_to_memorize --data data/cifar1
 mkdir cifar100_hard_to_memorize
 python -u main_PrAC_imp.py --core_set_method hard_to_memorize --data data/cifar100 --dataset cifar100 --arch res20s --split_file npy_files/cifar100-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir cifar100_hard_to_memorize > cifar100_hard_to_memorize/output.log
 
-mkdir cifar100_easy_to_forget
-python -u main_PrAC_imp.py --core_set_method easy_to_forget --data data/cifar100 --dataset cifar100 --arch res20s --split_file npy_files/cifar100-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir cifar100_hard_to_memorize > cifar100_hard_to_memorize/output.log
-
+mkdir cifar100_easy_to_forget_attempt_2
+python -u main_PrAC_imp.py --core_set_method easy_to_forget --data data/cifar100 --dataset cifar100 --arch res20s --split_file npy_files/cifar100-train-val.npy --batch_size 128 --lr 0.1 --pruning_times 16 --eb_eps 0.08 --prune_type rewind_lt --rewind_epoch 2 --threshold 0 --save_dir cifar100_easy_to_forget_attempt_2 > cifar100_easy_to_forget_attempt_2/output.log
 
 
 Run these three tests tomorrow morning

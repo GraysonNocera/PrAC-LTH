@@ -80,6 +80,7 @@ def main():
     # prepare dataset 
     # this gets the model and dataset based on the user input in CLI
     model, train_dataset, val_loader, test_loader, train_number = setup_model_dataset(args, if_train_set=True)
+    print(f"Train number for dataset: {train_number}")
     model.cuda()
 
     criterion = nn.CrossEntropyLoss()
@@ -162,6 +163,7 @@ def main():
     dataset = args.dataset
     ## END MY CODE ##
 
+    startTime = time.time()
     print('######################################## Start Standard Training Iterative Pruning ########################################')
 
     for state in range(start_state, args.pruning_times):
@@ -196,6 +198,8 @@ def main():
             all_result['train'].append(acc)
             all_result['ta'].append(tacc)
             all_result['test_ta'].append(test_tacc)
+
+            print(f"Epoch #{epoch}: Train Accuracy: {acc}, Validation Accuracy: {tacc}, Test Accuracy: {test_tacc}")
 
             # remember best prec@1 and save checkpoint
             is_best_sa = tacc  > best_sa
@@ -310,15 +314,21 @@ def main():
                 print(pie_sequence)
                 pie_num.append(len(list(pie_sequence)))
                 both_num.append(0)
-                    
 
             # Combining the two types of data from the two prunings
             # pie_sequence - Pruning where check between subnetwork and full model prediction
             # sequence (main_sequence) - Pruning where we check the forgetting statistics
             sequence = concate_sequence(pie_sequence, sequence)
+
+            if len(sequence) == 0:
+                sequence = np.load(args.split_file)[:train_number]
         else:
             pie_num.append(0)
             both_num.append(0)
+
+            if len(sequence) == 0:
+                # We have no pie_sequence and no sequence (i.e. no PrAC set), so we must call the sequence all the data
+                sequence = np.load(args.split_file)[:train_number]
 
         # dynamic training iterations
         # Just gaining training efficiency
@@ -332,6 +342,8 @@ def main():
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=decreasing_lr, gamma=0.1)
 
         example_wise_prediction = []
+
+    print(f"Algorithm finished in {time.time() - startTime} seconds")
 
     print("forgetting numbers: ", forgetting_num)
     print("pie num: ", pie_num)
