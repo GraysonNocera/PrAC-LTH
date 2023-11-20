@@ -3,8 +3,9 @@
 ## Experiment Instructions
 
 To run the experiments, complete the following steps:
-1. Install the dependencies in `requirements.txt` or activate the included virtual environment using ``source venv/bin/activate``.
-2. Make this addition to the advertorch library (in file ``advertorch/attacks/fast_adaptive_boundary.py``) to fix an error:
+1. Install the dependencies in `requirements.txt` using: ``pip install -r requirements.txt``.
+2. Make this addition to the advertorch library (in file ``advertorch/attacks/fast_adaptive_boundary.py``) and 
+remove reference to ``zero_gradients`` in the imports of the file:
 
 ![Fix Advertorch Dependency Error](./fixing-dep.png)
 
